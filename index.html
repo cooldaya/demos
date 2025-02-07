@@ -1,1 +1,103 @@
-test html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fff</title>
+
+    <link rel="stylesheet" href="./css/ttt.css">
+
+    <script>
+        const demos = [
+            {
+                name: "Demo 1",
+                description: "web中预览dwg文件",
+                dir: '1.web-dwg',
+                url: './1.web-dwg/index.html'
+            },
+            // {
+            //     name: "Demo 2",
+            //     description: "web中预览pdf文件",
+            //     dir: '2.web-pdf',
+            //     url: './2.web-pdf/index.html'
+            // },
+            // {
+            //     name: "Demo 3",
+            //     description: "web中预览3d模型",
+            //     dir: '3.web-3d',
+            //     url: './3.web-3d/index.html'
+            // },
+            // 可以在这里添加更多的demo对象
+        ];
+    </script>
+
+</head>
+
+<body>
+    <div class="demos-container"> </div>
+    <template id="demo-template">
+
+        <div class="demo-card">
+            <div class="demo-content">
+                <div class="content1">
+                    <div class="demo-title">
+                        demo1
+                    </div>
+                    <div class="description">
+                        dfsadfasdf
+                    </div>
+                </div>
+
+                <div class="content2">
+
+                    <iframe marginwidth="0" src="https://banruoai.cn/chat" marginheight="0" width="100%" name="i"
+                        id="urlIframe" frameborder="0" scrolling="no" onload="reinitIframe()">
+                    </iframe>
+
+                </div>
+            </div>
+            <div class="to-view">
+                查看
+            </div>
+        </div>
+
+    </template>
+    <script>
+        // 获取卡片容器元素
+        const containerElement = document.querySelector('.demos-container');
+        const fragment = document.createDocumentFragment();
+        // 获取模板元素
+        const templateElement = document.querySelector('#demo-template');
+
+        // 遍历demos数组，为每个demo生成一个卡片
+        demos.forEach(demo => {
+            const card = document.createElement('div');
+            card.innerHTML = templateElement.innerHTML;
+
+            // 给卡片添加标题和描述
+            const titleElement = card.querySelector('.demo-title');
+            const descriptionElement = card.querySelector('.description');
+            titleElement.textContent = demo.name;
+            descriptionElement.textContent = demo.description;
+
+            // 给卡片添加点击事件，跳转到demo页面
+            const toViewElement = card.querySelector('.to-view');
+            toViewElement.addEventListener('click', () => {
+                window.location.href = demo.url;
+            });
+
+            // 将卡片添加到fragment中
+            fragment.appendChild(card);
+        });
+
+        // 将fragment中的卡片添加到卡片容器中
+        containerElement.appendChild(fragment);
+
+
+
+    </script>
+
+</body>
+
+</html>
