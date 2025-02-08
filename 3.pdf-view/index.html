@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>Single PDF-viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link href="./css/icon.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/pdf.min.mjs" type="module"></script>
+    <script src="./js/pdfjs-viewer.js"></script>
+    <link rel="stylesheet" href="./css/pdfjs-viewer.css">
+    <style>
+        .pdfjs-toolbar,
+        .pdfjs-toolbar i {
+            font-size: 14px;
+        }
+
+        .pdfjs-toolbar span {
+            margin-right: 0.5em;
+            margin-left: 0.5em;
+            width: 4em !important;
+            font-size: 12px;
+        }
+
+        .pdfjs-toolbar .btn-sm {
+            padding: 0.12rem 0.25rem;
+
+        }
+
+        .pdfjs-toolbar {
+            width: 100%;
+            height: auto;
+            background: #ddd;
+            z-index: 100;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="row  pdfviewer p-0 row h-100 position-relative">
+        <div class="pdfjs-toolbar text-center row m-0 p-0 position-absolute top-0 start-0">
+            <div class="col-12 col-lg-6 my-1">
+                <button class="btn btn-secondary btn-sm btn-first" onclick="pdfViewer.first()"><i
+                        class="material-icons-outlined">skip_previous</i></button>
+                <button class="btn btn-secondary btn-sm btn-prev" onclick="pdfViewer.prev(); return false;"><i
+                        class="material-icons-outlined">navigate_before</i></button>
+                <span class="pageno"></span>
+                <button class="btn btn-secondary btn-sm btn-next" onclick="pdfViewer.next(); return false;"><i
+                        class="material-icons-outlined">navigate_next</i></button>
+                <button class="btn btn-secondary btn-sm btn-last" onclick="pdfViewer.last()"><i
+                        class="material-icons-outlined">skip_next</i></button>
+            </div>
+            <div class="col-12 col-lg-6 my-1">
+                <button class="btn btn-secondary btn-sm" pdf-opt="out"><i
+                        class="material-icons-outlined">zoom_out</i></button>
+                <span id="zoomval">100%</span>
+                <button class="btn btn-secondary btn-sm" pdf-opt="in"><i
+                        class="material-icons-outlined">zoom_in</i></button>
+                <button class="btn btn-secondary btn-sm ms-3" pdf-opt="width"><i
+                        class="material-icons-outlined">swap_horiz</i></button>
+                <button class="btn btn-secondary btn-sm" pdf-opt="height"><i
+                        class="material-icons-outlined">swap_vert</i></button>
+                <button class="btn btn-secondary btn-sm" pdf-opt="fit"><i
+                        class="material-icons-outlined">fit_screen</i></button>
+            </div>
+        </div>
+        <div class="pdfjs-viewer h-100" initial-zoom="fit" >
+        </div>
+    </div>
+
+    <script>
+        var pdfViewer;
+
+        const getParamsFileUrl = ()=>{
+            const urlParams = new URLSearchParams(window.location.search);
+            const fileUrl = urlParams.get('file');
+            return fileUrl;
+        }
+        window.addEventListener('DOMContentLoaded', function () {
+            var { pdfjsLib } = globalThis;
+            pdfjsLib.GlobalWorkerOptions.workerSrc = './js/pdf.worker.mjs';
+            pdfViewer = new PDFjsViewer($('.pdfjs-viewer'));
+            const fileUrl = getParamsFileUrl() || 'test.pdf';
+            console.log({fileUrl})
+            pdfViewer.loadDocument(fileUrl);
+
+            Array.from(document.querySelectorAll('[pdf-opt]')).forEach(function (btn) {
+                btn.addEventListener('click',()=>setZoom(btn.getAttribute('pdf-opt')));
+            });
+            function setZoom(zoom) {
+                pdfViewer.setZoom(zoom);
+                document.getElementById('zoomval').innerText = parseInt(pdfViewer.getZoom() * 100) + '%';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
