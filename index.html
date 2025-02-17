@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fff</title>
+    <title>demos</title>
     <link rel="stylesheet" href="./css/main.css">
     <script src="./demo-list.js"></script>
 </head>
@@ -55,6 +55,12 @@
             const descriptionElement = card.querySelector('.description');
             titleElement.textContent = demo.name;
             descriptionElement.textContent = demo.description;
+
+            // 设置预览iframe的url
+            const iframe = document.querySelector('.content2>iframe');
+            if(iframe){
+                iframe.url = demo.url;
+            }
 
             // 给卡片添加点击事件，跳转到demo页面
             const toViewElement = card.querySelector('.to-view');
